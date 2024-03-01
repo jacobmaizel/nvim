@@ -533,6 +533,16 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
+    -- Show diagnostic popup on cursor hover
+    -- local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
+
+    -- vim.api.nvim_create_autocmd("CursorHold", {
+    -- callback = function()
+    -- vim.diagnostic.open_float(nil, { focusable = false })
+    -- end,
+    -- group = diag_float_grp,
+    -- })
+
 
 
 

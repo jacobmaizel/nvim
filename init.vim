@@ -22,7 +22,7 @@ set scrolloff=8
 set colorcolumn=90
 set signcolumn=yes
 set background=dark
-" set completeopt=menu,menuone,noselect,noinsert
+set completeopt=menuone,noselect,noinsert
 set termguicolors
 
 " https://github.com/neovim/neovim/issues/21686
@@ -63,6 +63,7 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'lukas-reineke/cmp-under-comparator'
  
 " Rust specific
 " Plug 'simrat39/rust-tools.nvim'
@@ -70,6 +71,10 @@ Plug 'mrcjkb/rustaceanvim', { 'for': 'rust'}
 Plug 'rust-lang/rust.vim', { 'for': 'rust'}
 Plug 'saecki/crates.nvim', { 'tag': 'stable' }
 
+" TS JS
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 " Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -91,6 +96,21 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'folke/trouble.nvim'
 Plug 'mfussenegger/nvim-dap'
 
+" Tmux 
+Plug 'christoomey/vim-tmux-navigator'
+
+" Copilot
+Plug 'github/copilot.vim'
+
+
+" lsp kind
+Plug 'onsails/lspkind.nvim'
+
+
+" CMDLine 
+Plug 'folke/noice.nvim'
+Plug 'MunifTanjim/nui.nvim'
+Plug 'rcarriga/nvim-notify'
 
 call plug#end()
 
@@ -108,12 +128,10 @@ nnoremap <C-f> :NERDTreeFind<CR>
 let g:Illuminate_ftblacklist = ['nerdtree']
 let g:Illuminate_highlightUnderCursor = 1
 
-
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 
 " Go syntax highlighting
-
  " Auto formatting and importing
 let g:go_fmt_autosave = 1
 let g:go_auto_type_info = 1
@@ -131,10 +149,6 @@ let g:go_highlight_structs = 1
 let g:go_highlight_types = 1
 let g:go_fmt_command = "goimports"
 
-hi illuminatedWord guibg=#2c313c
-" hi link illuminatedWord Visual
-
-" augroup illuminate_augroup
-"     autocmd!
-"     autocmd VimEnter * hi link illuminatedWord CursorLine
-" augroup END
+" Prettier settings
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0

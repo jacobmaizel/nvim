@@ -5,6 +5,7 @@ require("jacobmaizel.mason")
 require("jacobmaizel.treesitter")
 require("jacobmaizel.cmp")
 require("jacobmaizel.rustacean")
+require("jacobmaizel.cmdlinenoice")
 
 require("nvim-autopairs").setup {}
 require('lualine').setup()
@@ -16,5 +17,6 @@ vim.g.netrw_winsize = 25
 
 vim.cmd("hi IlluminatedWordRead guibg=#2c313c")
 vim.cmd("hi IlluminatedWord guibg=#2c313c")
+vim.cmd("hi IlluminatedWordWrite guibg=#2c313c")
 vim.cmd("hi IlluminatedWordText guibg=#2c313c")
 
