@@ -6,6 +6,7 @@ require("jacobmaizel.treesitter")
 require("jacobmaizel.cmp")
 require("jacobmaizel.rustacean")
 require("jacobmaizel.cmdlinenoice")
+require("jacobmaizel.notify")
 
 require("nvim-autopairs").setup {}
 require('lualine').setup()

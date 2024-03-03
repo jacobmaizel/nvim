@@ -65,12 +65,42 @@ local override_cmp_item_weights= {
   Operator = 24,
   TypeParameter = 25,
 }
-
 -- Overridden compare.kind function
 -- This is a custom comparator that will sort the completion items by kind
--- This reverses the default order of the kind,
--- so that the snippets are at the bottom of the list
+-- This ensures that variables are at the top of the list, and snippets are at the bottom
 local override_compare_kind = function(entry1, entry2)
+  local kind1 = entry1:get_kind() --- @type lsp.CompletionItemKind | number
+  local kind2 = entry2:get_kind() --- @type lsp.CompletionItemKind | number
+
+  -- Prioritize variables over everything
+  if kind1 == types.lsp.CompletionItemKind.Variable then return true end
+  if kind2 == types.lsp.CompletionItemKind.Variable then return false end
+
+  -- Handle Text kind by assigning a high value to push them towards the bottom
+  kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
+  kind2 = kind2 == types.lsp.CompletionItemKind.Text and 100 or kind2
+
+  -- Deprioritize snippets to be at the bottom
+  if kind1 == types.lsp.CompletionItemKind.Snippet then return false end
+  if kind2 == types.lsp.CompletionItemKind.Snippet then return true end
+
+  -- General sort by kind for other types
+  local diff = kind1 - kind2
+  if diff < 0 then
+    return true
+  elseif diff > 0 then
+    return false
+  end
+
+  return nil
+end
+
+---kind: Entires with smaller ordinal value of 'kind' will be ranked higher.
+---(see lsp.CompletionItemKind enum).
+---Exceptions are that Text(1) will be ranked the lowest, and snippets be the highest.
+---@type cmp.ComparatorFunction 
+
+local kind_compare_override = function(entry1, entry2)
   local kind1 = entry1:get_kind() --- @type lsp.CompletionItemKind | number
   local kind2 = entry2:get_kind() --- @type lsp.CompletionItemKind | number
   kind1 = kind1 == types.lsp.CompletionItemKind.Text and 100 or kind1
@@ -92,30 +122,6 @@ local override_compare_kind = function(entry1, entry2)
   return nil
 end
 
-
-local override_compare_order = function(entry1, entry2)
-  -- Get priority values, defaulting to a large number if not found
-  local priority1 = override_cmp_item_weights[entry1.id] or 1000
-  local priority2 = override_cmp_item_weights[entry2.id] or 1000
-
-  -- Compare based on priority values
-  if priority1 < priority2 then
-    return true
-  elseif priority1 > priority2 then
-    return false
-  end
-
-  -- If priorities are equal, fall back to comparing by id
-  local diff = entry1.id - entry2.id
-  if diff < 0 then
-    return true
-  elseif diff > 0 then
-    return false
-  end
-
-  return nil
-end
-
   -- Set up nvim-cmp.
   local cmp = require'cmp'
   local lspkind = require('lspkind')
@@ -124,17 +130,16 @@ end
     completion = { completeopt = "noselect" },
 
     sorting = {
-      comparators = {
-           -- override_compare_order,
-           cmp.config.compare.order,
-          override_compare_kind,
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          require "cmp-under-comparator".under,
-          cmp.config.compare.sort_text,
-          cmp.config.compare.length,
-    },
+    comparators = {
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        cmp.config.compare.recently_used,
+        require("cmp-under-comparator").under,
+        -- cmp.config.compare.kind,
+        kind_compare_override,
+
+		},
   },
 
    formatting = {
@@ -173,14 +178,14 @@ end
     }),
 
     sources = cmp.config.sources({
-        { name = 'nvim_lsp', priority = 1},      -- from language server
+        { name = 'nvim_lsp'},      -- from language server
         { name = 'nvim_lua'},
         { name = 'copilot'},
         { name = 'nvim_lsp_signature_help'},
-        { name = 'luasnip', priority = 10},
+        { name = 'luasnip', max_item_count = 4},
       }, {
         { name = 'path' },
-        { name = 'buffer', keyword_length = 2 },
+        { name = 'buffer'},
       }),
 
   })
