@@ -46,6 +46,7 @@ Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2'}
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 " Plug 'petertriho/cmp-git'
+Plug 'kdheepak/lazygit.nvim'
 
 " Commenting
 Plug 'tpope/vim-commentary'
