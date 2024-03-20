@@ -16,6 +16,19 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, keymap_opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, keymap_opts)
     vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, keymap_opts)
+    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, keymap_opts)
+    -- vim.api.nvim_set_keymap('n', '<leader>cd', ':lua Copilot disable<CR>', keymap_opts)
+    -- vim.api.nvim_set_keymap('n', '<leader>ce', ':lua Copilot enable<CR>', keymap_opts)
+    vim.keymap.set('n', '<leader>cod', function()
+      vim.cmd('Copilot disable')
+    end, keymap_opts)
+
+    vim.keymap.set('n', '<leader>coe', function()
+      vim.cmd('Copilot enable')
+    end, keymap_opts)
+
+
+
 
     vim.lsp.inlay_hint.enable(bufnr, true)
 
@@ -38,33 +51,6 @@ local eslint_on_attach = function(client, bufnr)
     })
 end
 
-local override_cmp_item_weights= {
-  Variable = 1,
-  Method = 2,
-  Function = 3,
-  Text = 4,
-  Field = 5,
-  Constructor = 6,
-  Class = 7,
-  Interface = 8,
-  Module = 9,
-  Property = 10,
-  Unit = 11,
-  Value = 12,
-  Enum = 13,
-  Keyword = 14,
-  Snippet = 15,
-  Color = 16,
-  File = 17,
-  Reference = 18,
-  Folder = 19,
-  EnumMember = 20,
-  Constant = 21,
-  Struct = 22,
-  Event = 23,
-  Operator = 24,
-  TypeParameter = 25,
-}
 -- Overridden compare.kind function
 -- This is a custom comparator that will sort the completion items by kind
 -- This ensures that variables are at the top of the list, and snippets are at the bottom
@@ -291,6 +277,17 @@ end
           mode = "location"
         }
       }
+  }
+  require('lspconfig')['bzl'].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    filetypes = {"starlark", "Tiltfile"},
+  }
+
+  require('lspconfig')['tailwindcss'].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    --filetypes = {"ts", "tsx", "js", "jsx", "typescript", "javascript", "javascriptreact", "typescriptreact"},
   }
 
   require('lspconfig')['tsserver'].setup {

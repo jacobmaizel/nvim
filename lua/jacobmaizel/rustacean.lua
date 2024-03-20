@@ -15,6 +15,16 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, keymap_opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, keymap_opts)
 
+    vim.keymap.set('n', '<leader>cod', function()
+      vim.cmd('Copilot disable')
+    end, keymap_opts)
+
+    vim.keymap.set('n', '<leader>coe', function()
+      vim.cmd('Copilot enable')
+    end, keymap_opts)
+
+    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, keymap_opts)
+
     vim.opt.updatetime = 299
 
     vim.lsp.inlay_hint.enable(bufnr, true)
@@ -29,18 +39,43 @@ end
 
 local lspconfig = require("lspconfig")
 
+        -- → rust-analyzer.inlayHints.bindingModeHints.enable                      default: false
+        -- → rust-analyzer.inlayHints.chainingHints.enable                         default: true
+        -- → rust-analyzer.inlayHints.closingBraceHints.enable                     default: true
+        -- → rust-analyzer.inlayHints.closingBraceHints.minLines                   default: 25
+        -- → rust-analyzer.inlayHints.closureCaptureHints.enable                   default: false
+        -- → rust-analyzer.inlayHints.closureReturnTypeHints.enable                default: "never"
+        -- → rust-analyzer.inlayHints.closureStyle                                 default: "impl_fn"
+        -- → rust-analyzer.inlayHints.discriminantHints.enable                     default: "never"
+        -- → rust-analyzer.inlayHints.expressionAdjustmentHints.enable             default: "never"
+        -- → rust-analyzer.inlayHints.expressionAdjustmentHints.hideOutsideUnsafe  default: false
+        -- → rust-analyzer.inlayHints.expressionAdjustmentHints.mode               default: "prefix"
+        -- → rust-analyzer.inlayHints.implicitDrops.enable                         default: false
+        -- → rust-analyzer.inlayHints.lifetimeElisionHints.enable                  default: "never"
+        -- → rust-analyzer.inlayHints.lifetimeElisionHints.useParameterNames       default: false
+        -- → rust-analyzer.inlayHints.maxLength                                    default: 25
+        -- → rust-analyzer.inlayHints.parameterHints.enable                        default: true
+        -- → rust-analyzer.inlayHints.rangeExclusiveHints.enable                   default: false
+        -- → rust-analyzer.inlayHints.reborrowHints.enable                         default: "never"
+        -- → rust-analyzer.inlayHints.renderColons                                 default: true
+        -- → rust-analyzer.inlayHints.typeHints.enable                             default: true
+        -- → rust-analyzer.inlayHints.typeHints.hideClosureInitialization          default: false
+        -- → rust-analyzer.inlayHints.typeHints.hideNamedConstructor               default: false
+
 
 vim.g.rustaceanvim = {
     tools = {
         runnables = {
           use_telescope = true,
         },
-        inlay_hints = {
-          auto = true,
-          show_parameter_hints = true,
-          parameter_hints_prefix = "",
-          other_hints_prefix = "",
-        },
+
+        -- inlay_hints = {
+        --   highlight = "NonText"
+          -- auto = false,
+          -- show_parameter_hints = true,
+          -- parameter_hints_prefix = "",
+          -- other_hints_prefix = "",
+        -- },
     },
     -- LSP configuration
     -- float_win_config = {
@@ -54,6 +89,15 @@ vim.g.rustaceanvim = {
       default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
+
+          inlayHints = {
+            typeHints = true,
+            parameterHints = true,
+            chainingHints = false,
+            maxLength = 25,
+          },
+
+
             checkOnSave = {
                 command = "clippy",
               },

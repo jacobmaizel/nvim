@@ -1,4 +1,8 @@
 require'nvim-treesitter.configs'.setup {
+    autotag = {
+      enable = true
+    },
+
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
     ensure_installed = { "rust", "yaml", "typescript", "lua", "vim", "tsx", "toml", "go", "gomod",
     "gosum", "git_rebase", "git_config", "html", "json", "luadoc", "make", "markdown", "markdown_inline", "yaml"

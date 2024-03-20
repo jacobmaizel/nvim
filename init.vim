@@ -10,7 +10,7 @@ set relativenumber
 set hidden
 set nohlsearch
 set noerrorbells
-set nowrap
+" set nowrap
 set ignorecase
 set smartcase
 set noswapfile
@@ -36,6 +36,9 @@ Plug 'preservim/nerdtree'
 
 " QOL
 Plug 'windwp/nvim-autopairs'
+Plug 'windwp/nvim-ts-autotag'
+Plug 'ggandor/leap.nvim'
+Plug 'tpope/vim-repeat'
 
 " Navigation and leaping
 Plug 'nvim-lua/plenary.nvim'
@@ -51,6 +54,11 @@ Plug 'kdheepak/lazygit.nvim'
 " Commenting
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+" Plug 'tomtom/tcomment_vim'
+Plug 'preservim/nerdcommenter'
+" Plug 'numToStr/Comment.nvim'
+" Plug 'suy/vim-context-commentstring'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 " Syntax Highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
@@ -80,9 +88,6 @@ Plug 'prettier/vim-prettier', {
 " Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-" Themes
-Plug 'rose-pine/neovim'
-Plug 'nvim-tree/nvim-web-devicons'
 
 " Mason LSP Stuff
 Plug 'williamboman/mason.nvim'    
@@ -113,6 +118,11 @@ Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
 
+" Themes
+Plug 'rose-pine/neovim'
+Plug 'nvim-tree/nvim-web-devicons'
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 lua require('jacobmaizel')
@@ -125,7 +135,6 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
-
 let g:Illuminate_ftblacklist = ['nerdtree']
 let g:Illuminate_highlightUnderCursor = 1
 
@@ -135,7 +144,7 @@ let g:go_info_mode='gopls'
 " Go syntax highlighting
  " Auto formatting and importing
 let g:go_fmt_autosave = 1
-let g:go_auto_type_info = 1
+let g:go_auto_type_info = 0
 
 " Status line types/signatures
 let g:go_highlight_fields = 1
@@ -153,3 +162,31 @@ let g:go_fmt_command = "goimports"
 " Prettier settings
 let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
+
+
+
+
+" Nerd Tree
+" " Exit Vim if NERDTree is the only window remaining in the only tab.
+" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" " Close the tab if NERDTree is the only window remaining in it.
+" autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+"if exists('g:context#commentstring#table')
+  "let g:context#commentstring#table['javascript.jsx'] = {
+              "\ 'jsComment' : '// %s',
+              "\ 'jsImport' : '// %s',
+              "\ 'jsxStatment' : '// %s',
+              "\ 'jsxRegion' : '{/*%s*/}',
+              "\}
+"endif
+"
+
+let g:NERDCustomDelimiters={
+	\ 'javascript': { 'left': '//', 'right': '', 'leftAlt': '{/*', 'rightAlt': '*/}' },
+\}
