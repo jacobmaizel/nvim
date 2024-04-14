@@ -295,6 +295,11 @@ end
     on_attach = on_attach,
   }
 
+  -- require('lspconfig')['sqls'].setup {
+  --   capabilities = capabilities,
+  --   on_attach = on_attach,
+  -- }
+
 local lspconfig = require("lspconfig")
 -- local util = require "lspconfig/util"
 

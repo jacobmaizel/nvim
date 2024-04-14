@@ -44,6 +44,7 @@ Plug 'tpope/vim-repeat'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2'}
+Plug 'stevearc/oil.nvim'
 
 " Git
 Plug 'tpope/vim-fugitive'

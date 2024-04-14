@@ -6,6 +6,7 @@ require("jacobmaizel.treesitter")
 require("jacobmaizel.cmp")
 require("jacobmaizel.rustacean")
 -- require("jacobmaizel.cmdlinenoice")
+require("jacobmaizel.harpoon")
 
 local banned_messages = { "No information available" }
 vim.notify = function(msg, ...)

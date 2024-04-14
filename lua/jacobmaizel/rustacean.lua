@@ -27,8 +27,14 @@ local on_attach = function(client, bufnr)
 
     vim.opt.updatetime = 299
 
-    vim.lsp.inlay_hint.enable(bufnr, true)
 
+    vim.keymap.set('n', '<leader>ihe', function()
+      vim.lsp.inlay_hint.enable(bufnr, true)
+    end, keymap_opts)
+
+    vim.keymap.set('n', '<leader>ihd', function()
+      vim.lsp.inlay_hint.enable(bufnr, false)
+    end, keymap_opts)
 
     -- Goto previous/next diagnostic warning/error
     vim.keymap.set("n", "g[", vim.diagnostic.goto_prev, keymap_opts)
@@ -89,25 +95,28 @@ vim.g.rustaceanvim = {
       default_settings = {
         -- rust-analyzer language server configuration
         ['rust-analyzer'] = {
-
           inlayHints = {
             typeHints = true,
-            parameterHints = true,
-            chainingHints = false,
+            -- parameterHints = true,
+            -- reborrowHints = true,
+            chainingHints = true,
+            lifetimeElisionHints = true,
             maxLength = 25,
+            -- enable builder pattern hints
           },
-
-
-            checkOnSave = {
+          lru = {
+            capacity = 1024
+          },
+          checkOnSave = {
                 command = "clippy",
               },
-        imports = {
+          imports = {
                 granularity = {
                     group = "module",
                 },
                 prefix = "self",
             },
-            cargo = {
+          cargo = {
                 buildScripts = {
                     enable = true,
                 },
