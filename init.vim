@@ -113,6 +113,9 @@ Plug 'github/copilot.vim'
 " lsp kind
 Plug 'onsails/lspkind.nvim'
 
+" Context
+Plug 'SmiteshP/nvim-navic'
+Plug 'utilyre/barbecue.nvim'
 
 " CMDLine 
 Plug 'folke/noice.nvim'
@@ -120,7 +123,8 @@ Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
 
 " Themes
-Plug 'rose-pine/neovim'
+" Plug 'rose-pine/neovim'
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
@@ -128,7 +132,7 @@ call plug#end()
 
 lua require('jacobmaizel')
 
-colorscheme rose-pine
+" colorscheme catppuccin
 
 
 " EXTRA CONFIG, IM TOO LAZY TO MAKE THIS INTO LUA

@@ -39,7 +39,7 @@ local on_attach = function(client, bufnr)
     -- Goto previous/next diagnostic warning/error
     vim.keymap.set("n", "g[", vim.diagnostic.goto_prev, keymap_opts)
     vim.keymap.set("n", "g]", vim.diagnostic.goto_next, keymap_opts)
-    vim.keymap.set("n", "<leader>g", vim.diagnostic.open_float, keymap_opts)
+    vim.keymap.set("n", "<leader>t", vim.diagnostic.open_float, keymap_opts)
 
 end
 
@@ -100,7 +100,10 @@ vim.g.rustaceanvim = {
             -- parameterHints = true,
             -- reborrowHints = true,
             chainingHints = true,
-            lifetimeElisionHints = true,
+            lifetimeElisionHints = {
+              enable = true,
+              useParameterNames = true
+            },
             maxLength = 25,
             -- enable builder pattern hints
           },

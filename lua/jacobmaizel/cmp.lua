@@ -27,17 +27,20 @@ local on_attach = function(client, bufnr)
       vim.cmd('Copilot enable')
     end, keymap_opts)
 
+    vim.keymap.set('n', '<leader>ihe', function()
+      vim.lsp.inlay_hint.enable(bufnr, true)
+    end, keymap_opts)
 
-
-
-    vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.keymap.set('n', '<leader>ihd', function()
+      vim.lsp.inlay_hint.enable(bufnr, false)
+    end, keymap_opts)
 
     vim.opt.updatetime = 299
 
     -- Goto previous/next diagnostic warning/error
     vim.keymap.set("n", "g[", vim.diagnostic.goto_prev, keymap_opts)
     vim.keymap.set("n", "g]", vim.diagnostic.goto_next, keymap_opts)
-    vim.keymap.set("n", "<leader>g", vim.diagnostic.open_float, keymap_opts)
+    vim.keymap.set("n", "<leader>t", vim.diagnostic.open_float, keymap_opts)
 
 
 end
@@ -293,6 +296,33 @@ end
   require('lspconfig')['tsserver'].setup {
     capabilities = capabilities,
     on_attach = on_attach,
+     settings = {
+        typescript = {
+          inlayHints = {
+            includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+        javascript = {
+          inlayHints = {
+            includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayVariableTypeHints = true,
+
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+      },
   }
 
   -- require('lspconfig')['sqls'].setup {

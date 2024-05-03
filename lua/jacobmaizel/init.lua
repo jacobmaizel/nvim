@@ -7,6 +7,10 @@ require("jacobmaizel.cmp")
 require("jacobmaizel.rustacean")
 -- require("jacobmaizel.cmdlinenoice")
 require("jacobmaizel.harpoon")
+require("jacobmaizel.oil")
+require("jacobmaizel.lualine")
+require("jacobmaizel.catppuccin")
+require("jacobmaizel.barbeque")
 
 local banned_messages = { "No information available" }
 vim.notify = function(msg, ...)
@@ -20,7 +24,6 @@ end
 
 
 require("nvim-autopairs").setup {}
-require('lualine').setup()
 require('crates').setup()
 -- require('Comment').setup()
 
