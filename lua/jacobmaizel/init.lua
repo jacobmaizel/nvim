@@ -11,6 +11,7 @@ require("jacobmaizel.oil")
 require("jacobmaizel.lualine")
 require("jacobmaizel.catppuccin")
 require("jacobmaizel.barbeque")
+require("jacobmaizel.lint")
 
 local banned_messages = { "No information available" }
 vim.notify = function(msg, ...)

@@ -15,8 +15,13 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "g0", vim.lsp.buf.document_symbol, keymap_opts)
     vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, keymap_opts)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, keymap_opts)
-    vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, keymap_opts)
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, keymap_opts)
     vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, keymap_opts)
+    vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, keymap_opts)
+    vim.keymap.set('n', '<leader>u', function() vim.lsp.buf.format { async = true } end, keymap_opts)
+
+
+
     -- vim.api.nvim_set_keymap('n', '<leader>cd', ':lua Copilot disable<CR>', keymap_opts)
     -- vim.api.nvim_set_keymap('n', '<leader>ce', ':lua Copilot enable<CR>', keymap_opts)
     vim.keymap.set('n', '<leader>cod', function()
@@ -287,10 +292,41 @@ end
     filetypes = {"starlark", "Tiltfile"},
   }
 
+  require('lspconfig')['pyright'].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = {
+    pyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
+    python = {
+      analysis = {
+        -- Ignore all files for analysis to exclusively use Ruff for linting
+        ignore = { '*' },
+        typeCheckingMode = 'off'
+      },
+    },
+  },
+  }
+
+-- https://github.com/astral-sh/ruff-lsp/issues/119
+
+  require('lspconfig').ruff_lsp.setup {
+    capabilities = capabilities,
+  on_attach = on_attach,
+  init_options = {
+    settings = {
+      -- Any extra CLI arguments for `ruff` go here.
+      args = {},
+    }
+  }
+}
+
   require('lspconfig')['tailwindcss'].setup {
     capabilities = capabilities,
     on_attach = on_attach,
-    --filetypes = {"ts", "tsx", "js", "jsx", "typescript", "javascript", "javascriptreact", "typescriptreact"},
+    filetypes = {"ts", "tsx", "js", "jsx", "typescript", "javascript", "javascriptreact", "typescriptreact", "mdx"},
   }
 
   require('lspconfig')['tsserver'].setup {

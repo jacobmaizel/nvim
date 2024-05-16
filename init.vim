@@ -94,6 +94,9 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'williamboman/mason.nvim'    
 Plug 'williamboman/mason-lspconfig.nvim'
 
+" Linting
+Plug 'mfussenegger/nvim-lint'
+
 " Snippets
 Plug 'rafamadriz/friendly-snippets'
 Plug 'L3MON4D3/LuaSnip'
@@ -108,7 +111,6 @@ Plug 'christoomey/vim-tmux-navigator'
 
 " Copilot
 Plug 'github/copilot.vim'
-
 
 " lsp kind
 Plug 'onsails/lspkind.nvim'
