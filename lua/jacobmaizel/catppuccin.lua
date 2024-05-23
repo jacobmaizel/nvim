@@ -209,7 +209,7 @@ require("catppuccin").setup({
                         TSStorageClass = { fg = colors.peach },
                         TSStorageClassLifetime = { fg = colors.peach },
                         TSStrike = { fg = colors.subtext2 },
-                        TSString = { fg = colors.teal },
+                        TSString = { fg = colors.blue },
                         TSStringEscape = { fg = colors.green },
                         TSStringRegex = { fg = colors.green },
                         TSStringSpecial = { link = "SpecialChar" },

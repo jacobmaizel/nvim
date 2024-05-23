@@ -1,6 +1,6 @@
 
 require('lint').linters_by_ft = {
-  python = {'mypy', }
+  -- python = {'mypy', }
 }
 
 -- require('lint').linters.mypy.args = {'--config-file', 'mypy.ini'}
