@@ -1,5 +1,13 @@
 local types = require('cmp.types')
 
+
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*.json" },
+  callback = function()
+    vim.cmd "Prettier"
+  end
+})
+
 local shared_on_attach = function(client, bufnr)
   -- you can also put keymaps in here
   -- print("attached go a buffer, setting keymaps")
@@ -48,11 +56,12 @@ local shared_on_attach = function(client, bufnr)
   vim.keymap.set("n", "<leader>t", vim.diagnostic.open_float, keymap_opts)
 end
 
-local set_auto_formatter_pre_write = function(client, bufnr)
+local set_auto_formatter_pre_write_python = function(client, bufnr)
   vim.api.nvim_create_autocmd("BufWritePre", {
     buffer = bufnr,
     callback = function()
-      vim.lsp.buf.format()
+      -- vim.cmd "!ruff check --fix --select I"
+      vim.lsp.buf.format({ async = true })
     end,
   })
 end
@@ -60,10 +69,26 @@ end
 
 
 local eslint_on_attach = function(client, bufnr)
+  shared_on_attach(client, bufnr)
+
+  -- vim.api.nvim_create_autocmd("BufWritePre", {
+  --   buffer = bufnr,
+  --   command = "EslintFixAll",
+  -- })
+
   vim.api.nvim_create_autocmd("BufWritePre", {
     buffer = bufnr,
-    command = "EslintFixAll",
+    callback = function()
+      vim.cmd "EslintFixAll"
+      vim.cmd "Prettier"
+
+    end,
   })
+
+  -- vim.api.nvim_create_autocmd("BufWritePre", {
+  --   buffer = bufnr,
+  --   command = "Prettier",
+  -- })
 end
 
 -- Overridden compare.kind function
@@ -277,7 +302,9 @@ require('lspconfig')['eslint'].setup {
     experimental = {
       useFlatConfig = false
     },
-    format = true,
+    format = {
+      enable = true
+    },
     nodePath = "",
     onIgnoredFiles = "off",
     problems = {
@@ -324,14 +351,14 @@ require('lspconfig').ruff_lsp.setup {
   on_attach = function(client, bufnr)
     shared_on_attach(client, bufnr)
 
-    set_auto_formatter_pre_write(client, bufnr)
+    set_auto_formatter_pre_write_python(client, bufnr)
   end,
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here.
-      args = {},
-    }
-  }
+  -- init_options = {
+  --   settings = {
+  --     -- Any extra CLI arguments for `ruff` go here.
+  --     args = {},
+  --   }
+  -- }
 }
 
 require('lspconfig')['tailwindcss'].setup {
@@ -345,6 +372,9 @@ require('lspconfig')['tsserver'].setup {
   on_attach = shared_on_attach,
   settings = {
     typescript = {
+      format = {
+        enable = false
+      },
       inlayHints = {
         includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
         includeInlayParameterNameHintsWhenArgumentMatchesName = true,

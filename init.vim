@@ -64,6 +64,7 @@ Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 " Syntax Highlighting
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 
+
 " nvim-cmp
 Plug 'hrsh7th/nvim-cmp'
 Plug 'neovim/nvim-lspconfig'
@@ -85,6 +86,7 @@ Plug 'saecki/crates.nvim', { 'tag': 'stable' }
 Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+  " \ 'for': [ 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 " Go
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
@@ -167,7 +169,7 @@ let g:go_highlight_types = 1
 let g:go_fmt_command = "goimports"
 
 " Prettier settings
-let g:prettier#autoformat = 1
+" let g:prettier#autoformat = 1
 let g:prettier#autoformat_require_pragma = 0
 
 
