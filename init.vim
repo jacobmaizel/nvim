@@ -122,7 +122,7 @@ Plug 'SmiteshP/nvim-navic'
 Plug 'utilyre/barbecue.nvim'
 
 " CMDLine 
-Plug 'folke/noice.nvim'
+" Plug 'folke/noice.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'rcarriga/nvim-notify'
 

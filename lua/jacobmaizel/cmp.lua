@@ -17,7 +17,7 @@ local shared_on_attach = function(client, bufnr)
   vim.keymap.set("n", "<c-]>", vim.lsp.buf.definition, keymap_opts)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, keymap_opts)
   vim.keymap.set("n", "gD", vim.lsp.buf.implementation, keymap_opts)
-  vim.keymap.set("n", "<c-k>", vim.lsp.buf.signature_help, keymap_opts)
+  vim.keymap.set("n", "<c-s>", vim.lsp.buf.signature_help, keymap_opts)
   vim.keymap.set("n", "1gD", vim.lsp.buf.type_definition, keymap_opts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, keymap_opts)
   vim.keymap.set("n", "g0", vim.lsp.buf.document_symbol, keymap_opts)
@@ -68,6 +68,8 @@ end
 
 
 
+
+
 local eslint_on_attach = function(client, bufnr)
   shared_on_attach(client, bufnr)
 
@@ -81,7 +83,6 @@ local eslint_on_attach = function(client, bufnr)
     callback = function()
       vim.cmd "EslintFixAll"
       vim.cmd "Prettier"
-
     end,
   })
 
@@ -253,7 +254,10 @@ cmp.setup.cmdline(':', {
 
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
+
+-- This way is deprecated, use the default_capabilities instead
+-- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 require('lspconfig')['lua_ls'].setup {
   capabilities = capabilities,
   filetypes = { "lua" },
@@ -326,18 +330,42 @@ require('lspconfig')['bzl'].setup {
   filetypes = { "starlark", "Tiltfile" },
 }
 
+
+local pyright_on_attach = function(client, bufnr)
+  shared_on_attach(client, bufnr)
+end
+
+-- NOTE notes on how to adjust the duplicate tagged hints thing for unused variables
+-- https://github.com/astral-sh/ruff-lsp/issues/384
+
 require('lspconfig')['pyright'].setup {
   capabilities = capabilities,
-  on_attach = shared_on_attach,
+  -- capabilities = capabilities,
+  -- capabilities = (function()
+  --           local capabilities = vim.lsp.protocol.make_client_capabilities()
+  --           capabilities.textDocument.publishDiagnostics.tagSupport.valueSet = { 2 }
+  --           return capabilities
+  --         end)(),
+  on_attach = pyright_on_attach,
   settings = {
     pyright = {
       -- Using Ruff's import organizer
       disableOrganizeImports = true,
+      disableTaggedHints = true,
+      -- capabilities = {
+      --     textDocument = {
+      --       publishDiagnostics = {
+      --         tagSupport = {
+      --           valueSet = { 2 },
+      --         },
+      --       },
+      --     },
+      --   },
     },
     python = {
       analysis = {
         -- Ignore all files for analysis to exclusively use Ruff for linting
-        ignore = { '*' },
+        -- ignore = { '*' },
         -- typeCheckingMode = 'off'
       },
     },
@@ -345,6 +373,19 @@ require('lspconfig')['pyright'].setup {
 }
 
 -- https://github.com/astral-sh/ruff-lsp/issues/119
+-- https://www.reddit.com/r/neovim/comments/1ans7qi/code_action_on_save/
+
+-- Auto run a code action
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+-- callback = function()
+-- if vim.bo.ft == "python" then
+-- vim.lsp.buf.code_action {
+-- context = { only = { "source.fixAll.ruff" } },
+-- apply = true,
+-- }
+-- end
+-- end,
+-- })
 
 require('lspconfig').ruff_lsp.setup {
   capabilities = capabilities,
