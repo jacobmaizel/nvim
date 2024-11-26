@@ -32,7 +32,7 @@ call plug#begin()
 " UI
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'RRethy/vim-illuminate'
-Plug 'preservim/nerdtree'
+" Plug 'preservim/nerdtree'
 
 " QOL
 Plug 'windwp/nvim-autopairs'
@@ -89,7 +89,7 @@ Plug 'prettier/vim-prettier', {
   " \ 'for': [ 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 " Go
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 
 " Mason LSP Stuff
@@ -140,11 +140,11 @@ lua require('jacobmaizel')
 
 
 " EXTRA CONFIG, IM TOO LAZY TO MAKE THIS INTO LUA
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
-let g:Illuminate_ftblacklist = ['nerdtree']
+" nnoremap <leader>n :NERDTreeFocus<CR>
+" nnoremap <C-n> :NERDTree<CR>
+" nnoremap <C-t> :NERDTreeToggle<CR>
+" nnoremap <C-f> :NERDTreeFind<CR>
+" let g:Illuminate_ftblacklist = ['nerdtree']
 let g:Illuminate_highlightUnderCursor = 1
 
 let g:go_def_mode='gopls'
@@ -183,8 +183,8 @@ let g:prettier#autoformat_require_pragma = 0
 " autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
 " If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+" autocmd BufEnter * if winnr() == winnr('h') && bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+"     \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
 
 "if exists('g:context#commentstring#table')
   "let g:context#commentstring#table['javascript.jsx'] = {

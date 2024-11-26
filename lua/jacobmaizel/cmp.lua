@@ -8,6 +8,9 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   end
 })
 
+vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
+
 local shared_on_attach = function(client, bufnr)
   -- you can also put keymaps in here
   -- print("attached go a buffer, setting keymaps")
@@ -40,13 +43,14 @@ local shared_on_attach = function(client, bufnr)
     vim.cmd('Copilot enable')
   end, keymap_opts)
 
-  vim.keymap.set('n', '<leader>ihe', function()
-    vim.lsp.inlay_hint.enable(bufnr, true)
+  vim.keymap.set('n', '<leader>iht', function()
+    -- vim.lsp.inlay_hint.enable(bufnr, true)
+    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
   end, keymap_opts)
 
-  vim.keymap.set('n', '<leader>ihd', function()
-    vim.lsp.inlay_hint.enable(bufnr, false)
-  end, keymap_opts)
+  -- vim.keymap.set('n', '<leader>ihd', function()
+  --   vim.lsp.inlay_hint.enable(bufnr, false)
+  -- end, keymap_opts)
 
   vim.opt.updatetime = 299
 
@@ -152,6 +156,12 @@ end
 -- Set up nvim-cmp.
 local cmp = require 'cmp'
 local lspkind = require('lspkind')
+local luasnip = require('luasnip')
+
+local select_opts = {behavior = cmp.SelectBehavior.Select}
+
+-- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
+-- list of advanced mappings from the man himself
 cmp.setup({
   preselect = cmp.PreselectMode.None,
   completion = { completeopt = "noselect" },
@@ -171,6 +181,7 @@ cmp.setup({
 
   formatting = {
     -- Youtube: How to set up nice formatting for your sources.
+    fields = {'menu', 'abbr', 'kind'},
     format = lspkind.cmp_format {
       with_text = true,
       menu = {
@@ -185,9 +196,10 @@ cmp.setup({
       },
     },
   },
+
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
 
@@ -196,12 +208,54 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
 
+  -- good reference for mappings
+  --
+  -- https://www.reddit.com/r/neovim/comments/11wo0a3/having_trouble_with_lsp_and_cmp_completing/
+
   mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      local col = vim.fn.col('.') - 1
+
+      if cmp.visible() then
+        cmp.select_next_item(select_opts)
+      elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        fallback()
+      else
+        cmp.complete()
+      end
+    end, {'i', 's'}),
+
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item(select_opts)
+      else
+        fallback()
+      end
+    end, {'i', 's'}),
+
+    ['<C-f>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(1) then
+        luasnip.jump(1)
+      else
+        fallback()
+      end
+    end, {'i', 's'}),
+
+    ['<C-b>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, {'i', 's'}),
+
+
   }),
 
   sources = cmp.config.sources({
@@ -209,7 +263,7 @@ cmp.setup({
     { name = 'nvim_lua' },
     { name = 'copilot' },
     { name = 'nvim_lsp_signature_help' },
-    { name = 'luasnip',                max_item_count = 4 },
+    { name = 'luasnip',                max_item_count = 8 },
   }, {
     { name = 'path' },
     { name = 'buffer' },
@@ -258,12 +312,20 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- This way is deprecated, use the default_capabilities instead
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
+
 require('lspconfig')['lua_ls'].setup {
   capabilities = capabilities,
   filetypes = { "lua" },
   on_attach = shared_on_attach,
   settings = {
     Lua = {
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+      completion = {
+        callSnippet = "Replace"
+      },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
         globals = { 'vim' },
@@ -387,7 +449,7 @@ require('lspconfig')['pyright'].setup {
 -- end,
 -- })
 
-require('lspconfig').ruff_lsp.setup {
+require('lspconfig').ruff.setup {
   capabilities = capabilities,
   on_attach = function(client, bufnr)
     shared_on_attach(client, bufnr)
@@ -408,7 +470,7 @@ require('lspconfig')['tailwindcss'].setup {
   filetypes = { "ts", "tsx", "js", "jsx", "typescript", "javascript", "javascriptreact", "typescriptreact", "mdx" },
 }
 
-require('lspconfig')['tsserver'].setup {
+require('lspconfig')['ts_ls'].setup {
   capabilities = capabilities,
   on_attach = shared_on_attach,
   settings = {
