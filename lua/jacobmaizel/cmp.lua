@@ -2,6 +2,12 @@ local types = require('cmp.types')
 
 
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*.go" },
+  callback = function()
+    vim.lsp.buf.format({ async = true })
+  end
+})
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*.json" },
   callback = function()
     vim.cmd "Prettier"
@@ -10,6 +16,9 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
+vim.diagnostic.config {
+  float = { border = "rounded" },
+}
 
 local shared_on_attach = function(client, bufnr)
   -- you can also put keymaps in here
@@ -21,7 +30,7 @@ local shared_on_attach = function(client, bufnr)
   vim.keymap.set("n", "K", vim.lsp.buf.hover, keymap_opts)
   vim.keymap.set("n", "gD", vim.lsp.buf.implementation, keymap_opts)
   vim.keymap.set("n", "<c-s>", vim.lsp.buf.signature_help, keymap_opts)
-  vim.keymap.set("n", "1gD", vim.lsp.buf.type_definition, keymap_opts)
+  vim.keymap.set("n", "gD", vim.lsp.buf.type_definition, keymap_opts)
   vim.keymap.set("n", "gr", vim.lsp.buf.references, keymap_opts)
   vim.keymap.set("n", "g0", vim.lsp.buf.document_symbol, keymap_opts)
   vim.keymap.set("n", "gW", vim.lsp.buf.workspace_symbol, keymap_opts)
@@ -158,7 +167,7 @@ local cmp = require 'cmp'
 local lspkind = require('lspkind')
 local luasnip = require('luasnip')
 
-local select_opts = {behavior = cmp.SelectBehavior.Select}
+local select_opts = { behavior = cmp.SelectBehavior.Select }
 
 -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
 -- list of advanced mappings from the man himself
@@ -181,7 +190,7 @@ cmp.setup({
 
   formatting = {
     -- Youtube: How to set up nice formatting for your sources.
-    fields = {'menu', 'abbr', 'kind'},
+    fields = { 'menu', 'abbr', 'kind' },
     format = lspkind.cmp_format {
       with_text = true,
       menu = {
@@ -229,7 +238,7 @@ cmp.setup({
       else
         cmp.complete()
       end
-    end, {'i', 's'}),
+    end, { 'i', 's' }),
 
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -237,7 +246,7 @@ cmp.setup({
       else
         fallback()
       end
-    end, {'i', 's'}),
+    end, { 'i', 's' }),
 
     ['<C-f>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(1) then
@@ -245,7 +254,7 @@ cmp.setup({
       else
         fallback()
       end
-    end, {'i', 's'}),
+    end, { 'i', 's' }),
 
     ['<C-b>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(-1) then
@@ -253,7 +262,7 @@ cmp.setup({
       else
         fallback()
       end
-    end, {'i', 's'}),
+    end, { 'i', 's' }),
 
 
   }),
@@ -512,6 +521,12 @@ require('lspconfig')['ts_ls'].setup {
 
 local lspconfig = require("lspconfig")
 -- local util = require "lspconfig/util"
+
+
+-- https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
+require('lspconfig').golangci_lint_ls.setup {
+  filetypes = { 'go', 'gomod' }
+}
 
 require('lspconfig')['gopls'].setup {
   capabilities = capabilities,
