@@ -1,5 +1,16 @@
 local types = require('cmp.types')
 
+-- General keymaps
+vim.keymap.set('n', '<leader>y', function()
+  vim.fn.setreg('*', vim.fn.expand('<cword>'))
+end)
+
+vim.keymap.set('v', '<leader>r', function()
+  local r = table.concat(vim.fn.getregion(vim.fn.getpos("v"), vim.fn.getpos(".")), "\n")
+  vim.fn.setreg('*', r)
+  local keys = vim.api.nvim_replace_termcodes('<ESC>', true, false, true)
+  vim.api.nvim_feedkeys(keys, 'm', false)
+end)
 
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*.go" },
@@ -13,7 +24,6 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     vim.cmd "Prettier"
   end
 })
-
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' })
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 vim.diagnostic.config {
@@ -39,6 +49,7 @@ local shared_on_attach = function(client, bufnr)
   vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, keymap_opts)
   vim.keymap.set('n', '<leader>ll', vim.diagnostic.setloclist, keymap_opts)
   vim.keymap.set('n', '<leader>u', function() vim.lsp.buf.format { async = true } end, keymap_opts)
+
 
 
 
@@ -423,6 +434,7 @@ require('lspconfig')['pyright'].setup {
       -- Using Ruff's import organizer
       disableOrganizeImports = true,
       disableTaggedHints = true,
+
       -- capabilities = {
       --     textDocument = {
       --       publishDiagnostics = {
@@ -471,6 +483,11 @@ require('lspconfig').ruff.setup {
   --     args = {},
   --   }
   -- }
+}
+
+require('lspconfig')['zls'].setup {
+  capabilities = capabilities,
+  on_attach = shared_on_attach,
 }
 
 require('lspconfig')['tailwindcss'].setup {
@@ -552,7 +569,7 @@ require('lspconfig')['gopls'].setup {
       },
       staticcheck = true,
       gofumpt = true,
-      semanticTokens = true,
+      -- semanticTokens = true,
     }
   }
 }
