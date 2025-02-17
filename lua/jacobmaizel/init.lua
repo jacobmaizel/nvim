@@ -12,6 +12,7 @@ require("jacobmaizel.lualine")
 require("jacobmaizel.catppuccin")
 require("jacobmaizel.barbeque")
 require("jacobmaizel.lint")
+require("jacobmaizel.indent-blankline")
 
 -- local banned_messages = { "No information available" }
 -- vim.notify = function(msg, ...)

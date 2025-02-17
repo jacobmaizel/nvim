@@ -132,6 +132,10 @@ Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+Plug 'OXY2DEV/markview.nvim'
+
 call plug#end()
 
 lua require('jacobmaizel')
