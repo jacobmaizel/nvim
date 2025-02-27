@@ -26,6 +26,22 @@ set completeopt=menuone,noselect,noinsert
 set termguicolors
 
 " https://github.com/neovim/neovim/issues/21686
+" let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+" if empty(glob(data_dir . '/autoload/plug.vim'))
+"   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+"   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+" endif
+
+" if empty(glob('~/.vim/autoload/plug.vim'))
+"   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+"     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" endif
+
+" " Run PlugInstall if there are missing plugins
+" autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+"   \| PlugInstall --sync | source $MYVIMRC
+" \| endif
+
 
 call plug#begin()
 
@@ -43,6 +59,7 @@ Plug 'tpope/vim-repeat'
 " Navigation and leaping
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'ThePrimeagen/harpoon', { 'branch': 'harpoon2'}
 Plug 'stevearc/oil.nvim'
 
@@ -83,9 +100,9 @@ Plug 'rust-lang/rust.vim', { 'for': 'rust'}
 Plug 'saecki/crates.nvim', { 'tag': 'stable' }
 
 " TS JS
-Plug 'prettier/vim-prettier', {
-  \ 'do': 'yarn install --frozen-lockfile --production',
-  \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
+" Plug 'prettier/vim-prettier', {
+"   \ 'do': 'yarn install --frozen-lockfile --production',
+"   \ 'for': ['javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
   " \ 'for': [ 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 " Go
@@ -106,13 +123,13 @@ Plug 'saadparwaiz1/cmp_luasnip'
 
 " Errors / Debugging 
 Plug 'folke/trouble.nvim'
-Plug 'mfussenegger/nvim-dap'
+" Plug 'mfussenegger/nvim-dap'
 
 " Tmux 
 Plug 'christoomey/vim-tmux-navigator'
 
 " Copilot
-Plug 'github/copilot.vim'
+" Plug 'github/copilot.vim'
 
 " lsp kind
 Plug 'onsails/lspkind.nvim'
@@ -123,24 +140,27 @@ Plug 'utilyre/barbecue.nvim'
 
 " CMDLine 
 " Plug 'folke/noice.nvim'
-Plug 'MunifTanjim/nui.nvim'
-Plug 'rcarriga/nvim-notify'
+" Plug 'MunifTanjim/nui.nvim'
+" Plug 'rcarriga/nvim-notify'
 
 " Themes
 " Plug 'rose-pine/neovim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 
 Plug 'lukas-reineke/indent-blankline.nvim'
 
 Plug 'OXY2DEV/markview.nvim'
 
+Plug 'norcalli/nvim-colorizer.lua'
+
 call plug#end()
+
 
 lua require('jacobmaizel')
 
-" colorscheme catppuccin
+
 
 
 " EXTRA CONFIG, IM TOO LAZY TO MAKE THIS INTO LUA

@@ -21,8 +21,8 @@
 --     end
 --   })
 
-vim.keymap.set(
-"n",
-"<leader>ee",
-"oif err != nil {<CR>return err<CR>}"
-)
+-- vim.keymap.set(
+-- "n",
+-- "<leader>ee",
+-- "oif err != nil {<CR>return err<CR>}"
+-- )

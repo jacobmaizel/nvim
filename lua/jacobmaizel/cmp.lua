@@ -541,16 +541,71 @@ local lspconfig = require("lspconfig")
 
 
 -- https://github.com/golangci/golangci-lint/blob/master/.golangci.reference.yml
-require('lspconfig').golangci_lint_ls.setup {
-  filetypes = { 'go', 'gomod' }
+
+-- this is not working until we figure out what format it wants the glue functions in...
+-- require('lspconfig').cucumber_language_server.setup {
+--   capabilities = capabilities,
+--   on_attach = shared_on_attach,
+--   settings = {
+--     cucumber = {
+--       features = { "**/*.feature" },
+--       glue = { "*specs*/**/*.cs",
+--         "features/**/*.js",
+--         "features/**/*.jsx",
+--         "features/**/*.php",
+--         "features/**/*.py",
+--         "features/**/*.rs",
+--         "features/**/*.rb",
+--         "features/**/*.ts",
+--         "features/**/*.tsx",
+--         "features/**/*_test.go",
+--         "packages/demo/features_test.go",
+--         "src/test/**/*.java",
+--         "tests/**/*.py",
+--         "tests/**/*.rs"
+--       },
+--     },
+--   },
+-- }
+
+require('lspconfig').yamlls.setup {
+  filetypes = { 'yaml', 'yml' },
+  capabilities = capabilities,
+  -- on_attach = shared_on_attach,
+  on_attach = function(client, bufnr)
+    shared_on_attach(client, bufnr)
+    -- client.resolved_capabilities.document_formatting = true
+  end,
+  settings = {
+    yaml = {
+      completion = true,
+      validate = true,
+      hover = true,
+
+      format = {
+        enable = true
+      },
+      schemaStore = {
+        enable = true
+      }
+    }
+  }
 }
 
+require('lspconfig').golangci_lint_ls.setup {
+  filetypes = { 'go', 'gomod' },
+
+  capabilities = capabilities,
+  on_attach = shared_on_attach,
+}
+
+-- https://github.com/caarlos0/dotfiles/blob/39234246260f067e571d88174a2c624928e93a8c/modules/neovim/config/lua/user/lsp.lua#L58
 require('lspconfig')['gopls'].setup {
   capabilities = capabilities,
   on_attach = shared_on_attach,
-  cmd = { "gopls" },
-  filetypes = { "go", "gomod", "gowork", "gotmpl" },
-  root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+  -- cmd = { "gopls" },
+  -- filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  -- root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
   settings = {
     gopls = {
       hints = {
@@ -562,14 +617,31 @@ require('lspconfig')['gopls'].setup {
         ["functionTypeParameters"] = true,
         ["assignVariableTypes"] = true,
       },
+      -- https://github.com/golang/tools/blob/master/gopls/doc/codelenses.md
+      codelenses = {
+        gc_details = true,
+        generate = true,
+        govulncheck = true,
+        test = true,
+        tidy = true,
+        -- upgrade_dependency = true,
+      },
       completeUnimported = true,
+
       usePlaceholders = true,
       analyses = {
+        nilness = true,
         unusedparams = true,
+        unusedvariable = true,
+        unusedwrite = true,
+        useany = true,
       },
       staticcheck = true,
       gofumpt = true,
-      -- semanticTokens = true,
+      semanticTokens = true,
     }
-  }
+  },
+  flags = {
+    debounce_text_changes = 150,
+  },
 }
