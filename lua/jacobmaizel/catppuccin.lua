@@ -370,10 +370,12 @@ local opts = {
         ["@function_name"] = { fg = colors.green, style = { "bold" } },
         ["@keyword.function.go"] = { fg = colors.red, style = { "bold" } },
         ["@property.go"] = { fg = colors.blue },
+        ["@struct_create_key"] = { fg = colors.blue },
         ["@param_declaration"] = { fg = colors.red },
         -- ["@lsp.typemod.type.interface.go"] = {link= "TSType"},
         -- ["@lsp.typemod.variable.struct.go"] = { fg = colors.blue },
         -- ["@lsp.typemod.variable.definition.go"] = {link= "TSType"},
+        ["@struct_embedded_struct_name"] = { link = "TSType" },
 
 
 
