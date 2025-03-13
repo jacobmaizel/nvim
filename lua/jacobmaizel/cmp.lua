@@ -78,7 +78,7 @@ local set_auto_formatter_pre_write_python = function(client, bufnr)
 		buffer = bufnr,
 		callback = function()
 			-- vim.cmd "!ruff check --fix --select I"
-			vim.lsp.buf.format({ async = true })
+			vim.lsp.buf.format({ async = false })
 		end,
 	})
 end
@@ -360,7 +360,7 @@ require("lspconfig")["lua_ls"].setup({
 --
 require("lspconfig")["eslint"].setup({
 	capabilities = capabilities,
-	on_attach = eslint_on_attach,
+	on_attach = shared_on_attach,
 	-- filetypes = {"ts", "tsx", "js", "jsx", "typescript", "javascript", "javascriptreact", "typescriptreact"},
 	-- flags = { debounce_text_changes = 500 },
 	settings = {
@@ -459,6 +459,14 @@ require("lspconfig")["pyright"].setup({
 -- }
 -- end
 -- end,
+-- })
+--
+
+
+-- require("lspconfig")["open-policy-agent"].setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = shared_on_attach,
+-- 	filetypes = { "rego" },
 -- })
 
 require("lspconfig").ruff.setup({

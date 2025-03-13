@@ -14,7 +14,7 @@ require("jacobmaizel.barbeque")
 require("jacobmaizel.lint")
 require("jacobmaizel.indent-blankline")
 require("jacobmaizel.colorizer")
-require("jacobmaizel.conform")
+-- require("jacobmaizel.conform")
 
 require("telescope").load_extension("fzf")
 
@@ -29,6 +29,7 @@ require("telescope").load_extension("fzf")
 -- end
 
 require("nvim-autopairs").setup({})
+require("trouble").setup({})
 -- require('crates').setup()
 -- require('Comment').setup()
 

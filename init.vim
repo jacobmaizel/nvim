@@ -156,7 +156,7 @@ Plug 'OXY2DEV/markview.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 
 " formatter managers
-Plug 'stevearc/conform.nvim'
+" Plug 'stevearc/conform.nvim'
 
 call plug#end()
 
